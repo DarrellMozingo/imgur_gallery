@@ -20,6 +20,8 @@ public class GalleryImageTask extends AsyncTask<String, Void, Drawable> {
 	@Override
 	protected Drawable doInBackground(String... urls) {
 		try {
+			// better implementation: http://stackoverflow.com/questions/477572/android-strange-out-of-memory-issue-while-loading-an-image-to-a-bitmap-object/823966#823966
+
 			InputStream inputStream = (java.io.InputStream)new java.net.URL(urls[0]).getContent();
 			
 			BitmapFactory.Options options = new BitmapFactory.Options();
