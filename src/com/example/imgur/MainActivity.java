@@ -23,11 +23,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //bool showNext = getIntent().getBooleanExtra(MainActivity.SHOW_NEXT, false);
-        nextImage();
+        showNextImage();
     }
 
-    private void nextImage(){
+    private void showNextImage(){
     	new GalleryFeedTask(this, _imageCount).execute("http://imgur.com/gallery.json");
     	_imageCount++;
     }
@@ -44,10 +43,9 @@ public class MainActivity extends Activity {
     public void showImage(Drawable image) {
     	ImageView galleryImage = (ImageView) findViewById(R.id.galleryImage);
 		galleryImage.setImageDrawable(image);
-		image = null;
     }
 
     public void nextImage(View view) {
-    	nextImage();
+    	showNextImage();
     }
 }
