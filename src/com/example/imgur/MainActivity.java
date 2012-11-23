@@ -1,24 +1,15 @@
 package com.example.imgur;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
-	public static final String EXTRA_MESSAGE = "com.example.imgur.MESSAGE";
-	public static final String SHOW_NEXT = "com.example.imgur.SHOW_NEXT";
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        
-        //bool showNext = getIntent().getBooleanExtra(MainActivity.SHOW_NEXT, false);
-
-		new GalleryFeedTask(this).execute("http://imgur.com/gallery.json");
-    }
+	private int _imageCount = 0;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -26,22 +17,37 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
-    
-    public void showText(String text) { 
-    	TextView textView = new TextView(this);
- 		textView.setTextSize(40);
- 		textView.setText(text);
- 		
- 		setContentView(textView);
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        //bool showNext = getIntent().getBooleanExtra(MainActivity.SHOW_NEXT, false);
+        nextImage();
     }
 
-    public void sendMessage(View view) {
-    	//Intent intent = new Intent(this, DisplayMessageActivity.class);
-    	
-    	//EditText editText = (EditText)findViewById(R.id.edit_message);
-    	//String message = editText.getText().toString();
-    	//intent.putExtra(EXTRA_MESSAGE, message);
-    	
-    	//startActivity(intent);
+    private void nextImage(){
+    	new GalleryFeedTask(this, _imageCount).execute("http://imgur.com/gallery.json");
+    	_imageCount++;
+    }
+
+    public void showErrorMessage(String errorMessage) { 
+ 		showTitle("Error: " + errorMessage);
+    }
+    
+    public void showTitle(String title) {
+    	TextView textView = (TextView)findViewById(R.id.titleText);
+ 		textView.setText(title);
+    }
+
+    public void showImage(Drawable image) {
+    	ImageView galleryImage = (ImageView) findViewById(R.id.galleryImage);
+		galleryImage.setImageDrawable(image);
+		image = null;
+    }
+
+    public void nextImage(View view) {
+    	nextImage();
     }
 }
